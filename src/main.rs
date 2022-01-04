@@ -10,6 +10,12 @@ struct Handler;
 #[async_trait]
 impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
+        if msg.content == "!msgme" {
+            if let Err(why) = msg.author.dm(&ctx, |m| m.content("Hello!")).await {
+                println!("Error when direct messaging user: {:?}", why);
+            }
+        }
+
         if msg.content == "!ping" {
             if let Err(why) = msg
                 .channel_id
