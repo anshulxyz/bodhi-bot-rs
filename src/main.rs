@@ -1,5 +1,9 @@
 use std::env;
+mod data;
 
+use data::dhammapada as dhp;
+
+use sea_orm::{Database, DatabaseConnection, EntityTrait};
 use serenity::{
     async_trait,
     framework::{
@@ -30,6 +34,20 @@ async fn main() {
 
     // discord bot token
     let token = env::var("DISCORD_TOKEN").expect("Expected a token from environment.");
+
+    let database_url = env::var("DATABASE_URL").expect("Expected a database url from environment.");
+
+    // database connection
+    let db: DatabaseConnection = Database::connect(database_url)
+        .await
+        .expect("Error creating database connection");
+
+    let verse: Option<dhp::Model> = dhp::Entity::find_by_id(1)
+        .one(&db)
+        .await
+        .expect("Error fetching a verse");
+
+    println!("{:?}", verse);
 
     let framework = StandardFramework::new()
         .configure(|f| {
@@ -77,8 +95,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         msg.channel_id
             .say(&ctx.http, "WIP random verse feature")
             .await?;
-    } 
-    else {
+    } else {
         msg.channel_id
             .say(&ctx.http, "Please try the help command. `++help`")
             .await?;
