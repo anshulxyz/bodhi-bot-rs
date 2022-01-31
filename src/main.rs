@@ -1,3 +1,5 @@
+use rand::Rng;
+
 use std::env;
 mod data;
 
@@ -15,15 +17,18 @@ use serenity::{
     },
     model::{channel::Message, gateway::Ready},
     prelude::*,
-    utils::MessageBuilder,
 };
 struct Handler;
 
+struct DBConnection;
+
+impl TypeMapKey for DBConnection {
+    type Value = DatabaseConnection;
+}
+
 #[async_trait]
 impl EventHandler for Handler {
-    async fn message(&self, _ctx: Context, _msg: Message) {}
-
-    async fn ready(&self, _: Context, ready: Ready) {
+    async fn ready(&self, _ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
     }
 }
@@ -42,13 +47,6 @@ async fn main() {
         .await
         .expect("Error creating database connection");
 
-    let verse: Option<dhp::Model> = dhp::Entity::find_by_id(1)
-        .one(&db)
-        .await
-        .expect("Error fetching a verse");
-
-    println!("{:?}", verse);
-
     let framework = StandardFramework::new()
         .configure(|f| {
             f.with_whitespace(false)
@@ -63,6 +61,7 @@ async fn main() {
     let mut client = Client::builder(&token)
         .event_handler(Handler)
         .framework(framework)
+        .type_map_insert::<DBConnection>(db)
         .await
         .expect("Error creating client");
     if let Err(why) = client.start().await {
@@ -76,25 +75,79 @@ struct General;
 
 #[command]
 async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
-    if args.len() == 1_usize {
-        let first = args.single::<f64>()?;
-        let response = MessageBuilder::new().push(&first).build();
+    let client_data = ctx.data.read().await;
+    let db = client_data
+        .get::<DBConnection>()
+        .expect("Expected DBConnection in TypeMap");
 
-        msg.channel_id.say(&ctx.http, &response).await?;
+    if args.len() == 1_usize {
+        // single verse number
+        let first = args.single::<i32>()?;
+        let verse: dhp::Model = dhp::Entity::find_by_id(first)
+            .one(db)
+            .await
+            .expect("Error fetching a verse")
+            .unwrap();
+        if let Err(why) = msg
+            .channel_id
+            .send_message(&ctx, |m| {
+                m.embed(|e| {
+                    e.title("Dhammapada");
+                    e.colour((255, 153, 0));
+                    e.field(verse.num, verse.muller, false);
+                    e
+                });
+                m
+            })
+            .await
+        {
+            println!("Error sending single verse. {:?}", why)
+        }
     } else if args.len() == 2_usize {
-        let first = args.single::<f64>()?;
-        let second = args.single::<f64>()?;
-        let response = MessageBuilder::new()
-            .push("Found two: ")
-            .push(&first)
-            .push(" and ")
-            .push(&second)
-            .build();
-        msg.channel_id.say(&ctx.http, &response).await?;
+        // verse number range
+        let _first = args.single::<i32>()?;
+        let _second = args.single::<i32>()?;
+        if let Err(why) = msg
+            .channel_id
+            .send_message(&ctx, |m| {
+                m.embed(|e| {
+                    e.title("Dhammapada");
+                    e.colour((255, 153, 0));
+                    e.field("some name", "some value", false);
+                    e
+                });
+                m
+            })
+            .await
+        {
+            println!("Error sending multi verse. {:?}", why)
+        }
     } else if args.is_empty() {
-        msg.channel_id
-            .say(&ctx.http, "WIP random verse feature")
-            .await?;
+        // send a random verse
+        let mut rng = rand::rngs::OsRng;
+        let random_num: i32 = rng.gen_range(1..=423);
+
+        let verse: dhp::Model = dhp::Entity::find_by_id(random_num)
+            .one(db)
+            .await
+            .expect("Error fetching a verse")
+            .unwrap();
+
+        if let Err(why) = msg
+            .channel_id
+            .send_message(&ctx, |m| {
+                m.embed(|e| {
+                    e.title("Dhammapada");
+                    e.colour((255, 153, 0));
+                    e.field(verse.num, verse.muller, false);
+                    e
+                });
+                m
+            })
+            .await
+        {
+            println!("Error sending random verse. {:?}", why)
+        }
     } else {
         msg.channel_id
             .say(&ctx.http, "Please try the help command. `++help`")
