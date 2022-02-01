@@ -105,15 +105,35 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         }
     } else if args.len() == 2_usize {
         // verse number range
-        let _first = args.single::<i32>()?;
-        let _second = args.single::<i32>()?;
+        let first_num = args.single::<i32>()?;
+        let last_num = args.single::<i32>()?;
+
+        // since Discord only allows 25 fields in embed at max
+        let last_num = if last_num - first_num > 25 {
+            25
+        } else {
+            last_num
+        };
+
+        let mut verses = Vec::new();
+
+        // loop over first verse to last and add tuple to the vector
+        for n in first_num..=last_num {
+            let verse: dhp::Model = dhp::Entity::find_by_id(n)
+                .one(db)
+                .await
+                .expect("Error fetching a verse for id:{n}")
+                .unwrap();
+            verses.push((verse.num, verse.muller, false))
+        }
+
         if let Err(why) = msg
             .channel_id
             .send_message(&ctx, |m| {
                 m.embed(|e| {
                     e.title("Dhammapada");
                     e.colour((255, 153, 0));
-                    e.field("some name", "some value", false);
+                    e.fields(verses);
                     e
                 });
                 m
