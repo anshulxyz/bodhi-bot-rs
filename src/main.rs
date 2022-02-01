@@ -1,6 +1,7 @@
 use rand::Rng;
 
 use std::env;
+use std::mem;
 mod data;
 
 use data::dhammapada as dhp;
@@ -105,15 +106,18 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         }
     } else if args.len() == 2_usize {
         // verse number range
-        let first_num = args.single::<i32>()?;
-        let last_num = args.single::<i32>()?;
+        let mut first_num = args.single::<i32>()?;
+        let mut last_num = args.single::<i32>()?;
+
+        // in case user enter bigger number before smaller
+        if first_num > last_num {
+            mem::swap(&mut first_num, &mut last_num);
+        }
 
         // since Discord only allows 25 fields in embed at max
-        let last_num = if last_num - first_num > 25 {
-            25
-        } else {
-            last_num
-        };
+        if last_num - first_num > 25 {
+            last_num = 25;
+        }
 
         let mut verses = Vec::new();
 
