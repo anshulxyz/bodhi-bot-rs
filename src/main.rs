@@ -71,7 +71,7 @@ async fn main() {
 }
 
 #[group]
-#[commands(dhp)]
+#[commands(dhp, invite)]
 struct General;
 
 #[command]
@@ -109,7 +109,15 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         let mut first_num = args.single::<i32>()?;
         let mut last_num = args.single::<i32>()?;
 
-        // in case user enter bigger number before smaller
+        // since 423 is the last verse
+        if first_num > 423 {
+            first_num = 423;
+        }
+        if last_num > 423 {
+            last_num = 423;
+        }
+
+        // swap in case user enters bigger number before smaller
         if first_num > last_num {
             mem::swap(&mut first_num, &mut last_num);
         }
@@ -190,9 +198,34 @@ async fn help(ctx: &Context, msg: &Message) -> CommandResult {
                 e.title("Help");
                 e.colour((255, 153, 0));
                 e.description("How to use this bot.");
+                e.field("Dhammapada (dhp)", "———", false);
                 e.field("`++dhp`", "Get a random verse", false);
                 e.field("`++dhp 209`", "Get the 209th verse", false);
                 e.field("`++dhp 103 106`", "Get verses from 103 to 106", false);
+                e.field("Others", "———", false);
+                e.field("`++invite`", "Invite link for this bot", false);
+
+                e
+            });
+            m
+        })
+        .await
+    {
+        println!("Error executing help command: {:?}", why);
+    }
+    Ok(())
+}
+
+#[command]
+async fn invite(ctx: &Context, msg: &Message) -> CommandResult {
+    if let Err(why) = msg
+        .channel_id
+        .send_message(&ctx, |m| {
+            m.embed(|e| {
+                e.title("Invite");
+                e.colour((255, 153, 0));
+                // e.description("Invite Bot link");
+                e.field("—", "[Click here to invite the bot](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=274877925376&scope=bot)", false);
 
                 e
             });
