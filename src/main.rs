@@ -93,7 +93,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             .channel_id
             .send_message(&ctx, |m| {
                 m.embed(|e| {
-                    e.title("Dhammapada");
+                    e.title("Dhammapada :wheel_of_dharma:");
                     e.colour((255, 153, 0));
                     e.field(verse.num, verse.muller, false);
                     e
@@ -143,7 +143,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             .channel_id
             .send_message(&ctx, |m| {
                 m.embed(|e| {
-                    e.title("Dhammapada");
+                    e.title("Dhammapada :wheel_of_dharma:");
                     e.colour((255, 153, 0));
                     e.fields(verses);
                     e
@@ -169,7 +169,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             .channel_id
             .send_message(&ctx, |m| {
                 m.embed(|e| {
-                    e.title("Dhammapada");
+                    e.title("Dhammapada :wheel_of_dharma:");
                     e.colour((255, 153, 0));
                     e.field(verse.num, verse.muller, false);
                     e
