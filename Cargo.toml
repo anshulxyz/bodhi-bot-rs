@@ -13,6 +13,7 @@ serenity = { version = "0.10.10", default-features = false, features = [
     "gateway",
     "rustls_backend",
     "model",
+    "cache",
 ] }
 tokio = { version = "1.16.1", features = ["macros", "rt-multi-thread"] }
 sea-orm = { version = "0.5.0", features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ], default-features = false }

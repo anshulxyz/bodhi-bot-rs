@@ -1,5 +1,6 @@
 use rand::Rng;
 
+use std::collections::HashSet;
 use std::env;
 use std::mem;
 mod data;
@@ -16,8 +17,10 @@ use serenity::{
         },
         StandardFramework,
     },
+    http::Http,
     model::{channel::Message, gateway::Ready},
     prelude::*,
+    utils::MessageBuilder,
 };
 struct Handler;
 
@@ -41,6 +44,26 @@ async fn main() {
     // discord bot token
     let token = env::var("DISCORD_TOKEN").expect("Expected a token from environment.");
 
+    let http = Http::new_with_token(&token);
+
+    // refer: https://github.com/serenity-rs/serenity/blob/3a64da19e75f2c70830beeca9c0963f7d579a992/examples/e05_command_framework/src/main.rs#L228-L245
+    // We will fetch your bot's owners and id
+    let (owners, bot_id) = match http.get_current_application_info().await {
+        Ok(info) => {
+            let mut owners = HashSet::new();
+            if let Some(team) = info.team {
+                owners.insert(team.owner_user_id);
+            } else {
+                owners.insert(info.owner.id);
+            }
+            match http.get_current_user().await {
+                Ok(bot_id) => (owners, bot_id.id),
+                Err(why) => panic!("Could not access the bot id: {:?}", why),
+            }
+        }
+        Err(why) => panic!("Could not access application info: {:?}", why),
+    };
+
     let database_url = env::var("DATABASE_URL").expect("Expected a database url from environment.");
 
     // database connection
@@ -51,11 +74,14 @@ async fn main() {
     let framework = StandardFramework::new()
         .configure(|f| {
             f.with_whitespace(false)
+                .on_mention(Some(bot_id))
                 .prefix("++")
                 .case_insensitivity(false)
                 .delimiters(vec![" "])
+                .owners(owners)
         })
         .help(&HELP)
+        .group(&OWNER_GROUP)
         .group(&GENERAL_GROUP);
 
     // app client
@@ -235,5 +261,28 @@ async fn invite(ctx: &Context, msg: &Message) -> CommandResult {
     {
         println!("Error executing help command: {:?}", why);
     }
+    Ok(())
+}
+
+#[group]
+#[commands(stats)]
+#[owners_only]
+struct Owner;
+
+#[command]
+async fn stats(ctx: &Context, msg: &Message) -> CommandResult {
+    // Give some statistics about the bot, such as number of servers the bot is in.
+
+    let guilds = ctx.cache.guilds().await.len();
+
+    let response = MessageBuilder::new()
+        .push("Guilds in the Cache: ")
+        .push(guilds)
+        .build();
+
+    if let Err(why) = msg.channel_id.say(&ctx.http, &response).await {
+        println!("Error sending message: {:?}", why);
+    }
+
     Ok(())
 }
