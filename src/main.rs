@@ -3,8 +3,8 @@ use rand::Rng;
 use std::collections::HashSet;
 use std::env;
 use std::mem;
-mod data;
 
+mod data;
 use data::dhammapada as dhp;
 
 use sea_orm::{Database, DatabaseConnection, EntityTrait};
@@ -44,10 +44,10 @@ async fn main() {
     // discord bot token
     let token = env::var("DISCORD_TOKEN").expect("Expected a token from environment.");
 
-    let http = Http::new_with_token(&token);
+    let http = Http::new(&token);
 
     // refer: https://github.com/serenity-rs/serenity/blob/3a64da19e75f2c70830beeca9c0963f7d579a992/examples/e05_command_framework/src/main.rs#L228-L245
-    // We will fetch your bot's owners and id
+    // This is for fetching owner's ID so that it can be used to make Owner Only commands
     let (owners, bot_id) = match http.get_current_application_info().await {
         Ok(info) => {
             let mut owners = HashSet::new();
@@ -64,6 +64,7 @@ async fn main() {
         Err(why) => panic!("Could not access application info: {:?}", why),
     };
 
+    // relative location of the SQLite database file
     let database_url = env::var("DATABASE_URL").expect("Expected a database url from environment.");
 
     // database connection
@@ -76,7 +77,7 @@ async fn main() {
             f.with_whitespace(false)
                 .on_mention(Some(bot_id))
                 .prefix("++")
-                .case_insensitivity(false)
+                .case_insensitivity(true)
                 .delimiters(vec![" "])
                 .owners(owners)
         })
@@ -84,8 +85,10 @@ async fn main() {
         .group(&OWNER_GROUP)
         .group(&GENERAL_GROUP);
 
+    let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
+
     // app client
-    let mut client = Client::builder(&token)
+    let mut client = Client::builder(&token, intents)
         .event_handler(Handler)
         .framework(framework)
         .type_map_insert::<DBConnection>(db)
@@ -273,7 +276,7 @@ struct Owner;
 async fn stats(ctx: &Context, msg: &Message) -> CommandResult {
     // Give some statistics about the bot, such as number of servers the bot is in.
 
-    let guilds = ctx.cache.guilds().await.len();
+    let guilds = ctx.cache.guilds().len();
 
     let response = MessageBuilder::new()
         .push("Guilds in the Cache: ")
