@@ -76,7 +76,6 @@ async fn main() {
         .configure(|f| {
             f.with_whitespace(false)
                 .on_mention(Some(bot_id))
-                .prefix("++")
                 .case_insensitivity(true)
                 .delimiters(vec![" "])
                 .owners(owners)
@@ -85,7 +84,7 @@ async fn main() {
         .group(&OWNER_GROUP)
         .group(&GENERAL_GROUP);
 
-    let intents = GatewayIntents::GUILD_MESSAGES | GatewayIntents::MESSAGE_CONTENT;
+    let intents = GatewayIntents::GUILD_MESSAGES;
 
     // app client
     let mut client = Client::builder(&token, intents)
