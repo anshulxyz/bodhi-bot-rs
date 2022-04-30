@@ -1,7 +1,9 @@
 [package]
 name = "bodhi-bot-rs"
-version = "0.1.0"
+version = "0.2.0"
+authors = ["Anshul Chauhan anshulchauhan@outlook.com"]
 edition = "2021"
+rust-version = "1.60.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
