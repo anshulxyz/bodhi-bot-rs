@@ -10,17 +10,15 @@ me on [twitter.com/anshulxyz](https://twitter.com/anshulxyz)
 
 Currently available scripts/books/texts:
 
-- Dhammapada
+### 1. Dhammapada
 
-## Features
+Features:-
 
 - Fetch single verse
 - Fetch a random verse
 - Fetch a range of verses
 
-## Translations
-
-Currently available translation(s):
+Translations:-
 
 - Max Müller
 
@@ -31,29 +29,21 @@ Adding more translations/versions and scripts soon.
 To get the 14th verse of the Dhammapada
 
 ```
-++dhp 14
+@BodhiBot dhp 14
 ```
 
 To get the verses from 103th till 105th of the Dhammapada
+
 ```
-++dhp 103 105
+@BodhiBot dhp 103 105
 ```
 
 To get a random verse from the Dhammapada
+
 ```
-++dhp
+@BodhiBot dhp
 ```
 
 ## Invite
 
 Invite the bot of your server using [this link](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=274877925376&scope=bot)
-
-## Code
-
-### Run
-```
-git clone https://github.com/anshulxyz/bodhi-bot-rs.git
-cd bodhi-bot-rs
-docker build -t bodhi .
-docker run --env-file .env bodhi
-```
