@@ -253,7 +253,7 @@ async fn invite(ctx: &Context, msg: &Message) -> CommandResult {
                 e.title("Invite");
                 e.colour((255, 153, 0));
                 // e.description("Invite Bot link");
-                e.field("—", "[Click here to invite the bot](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=274877925376&scope=bot)", false);
+                e.field("—", "[Click here to invite the bot](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=277025392640&scope=bot%20applications.commands)", false);
 
                 e
             });
