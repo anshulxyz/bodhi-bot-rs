@@ -210,7 +210,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         }
     } else {
         msg.channel_id
-            .say(&ctx.http, "Please try the help command. `++help`")
+            .say(&ctx.http, "Please try the help command. `@BodhiBot help`")
             .await?;
     }
 
@@ -227,11 +227,15 @@ async fn help(ctx: &Context, msg: &Message) -> CommandResult {
                 e.colour((255, 153, 0));
                 e.description("How to use this bot.");
                 e.field("Dhammapada (dhp)", "———", false);
-                e.field("`++dhp`", "Get a random verse", false);
-                e.field("`++dhp 209`", "Get the 209th verse", false);
-                e.field("`++dhp 103 106`", "Get verses from 103 to 106", false);
+                e.field("`@BodhiBot dhp`", "Get a random verse", false);
+                e.field("`@BodhiBot dhp 209`", "Get the 209th verse", false);
+                e.field(
+                    "`@BodhiBot dhp 103 106`",
+                    "Get verses from 103 to 106",
+                    false,
+                );
                 e.field("Others", "———", false);
-                e.field("`++invite`", "Invite link for this bot", false);
+                e.field("`@BodhiBot invite`", "Invite link for this bot", false);
 
                 e
             });
@@ -271,9 +275,9 @@ async fn invite(ctx: &Context, msg: &Message) -> CommandResult {
 #[owners_only]
 struct Owner;
 
+/// A Owner only command that returns the bumber of servers/guilds the bot is part of.
 #[command]
 async fn stats(ctx: &Context, msg: &Message) -> CommandResult {
-    // Give some statistics about the bot, such as number of servers the bot is in.
 
     let guilds = ctx.cache.guilds().len();
 
@@ -283,7 +287,7 @@ async fn stats(ctx: &Context, msg: &Message) -> CommandResult {
         .build();
 
     if let Err(why) = msg.channel_id.say(&ctx.http, &response).await {
-        println!("Error sending message: {:?}", why);
+        println!("Error executing stats command: {:?}", why);
     }
 
     Ok(())
