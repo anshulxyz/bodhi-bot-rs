@@ -1,5 +1,5 @@
 .PHONY: all
-all: format clippy build run
+all: format clippy build test run
 
 .PHONY: format
 format:
