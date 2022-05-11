@@ -124,6 +124,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
                     e.title("Dhammapada :wheel_of_dharma:");
                     e.colour((255, 153, 0));
                     e.field(verse.num, verse.muller, false);
+                    e.footer(|f| f.text("Translation: Max Müller"));
                     e
                 });
                 m
@@ -174,6 +175,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
                     e.title("Dhammapada :wheel_of_dharma:");
                     e.colour((255, 153, 0));
                     e.fields(verses);
+                    e.footer(|f| f.text("Translation: Max Müller"));
                     e
                 });
                 m
@@ -200,6 +202,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
                     e.title("Dhammapada :wheel_of_dharma:");
                     e.colour((255, 153, 0));
                     e.field(verse.num, verse.muller, false);
+                    e.footer(|f| f.text("Translation: Max Müller"));
                     e
                 });
                 m
@@ -278,7 +281,6 @@ struct Owner;
 /// A Owner only command that returns the bumber of servers/guilds the bot is part of.
 #[command]
 async fn stats(ctx: &Context, msg: &Message) -> CommandResult {
-
     let guilds = ctx.cache.guilds().len();
 
     let response = MessageBuilder::new()
