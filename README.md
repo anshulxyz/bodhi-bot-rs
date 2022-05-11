@@ -1,16 +1,13 @@
 # Bodhi Bot ☸️
 
-A Discord bot for referencing Buddhist verses and texts. \
-To see the usage of the bot `++help`.
+A Discord bot for referencing Buddhist verses and texts.
 
 If you have any issues with the bot, or have a suggestion. Feel free to contact
 me on [twitter.com/anshulxyz](https://twitter.com/anshulxyz)
 
-## Scripts
+## Scriptures
 
-Currently available scripts/books/texts:
-
-### 1. Dhammapada
+### Dhammapada
 
 Features:-
 
@@ -18,31 +15,21 @@ Features:-
 - Fetch a random verse
 - Fetch a range of verses
 
-Translations:-
-
-- Max Müller
-
-Adding more translations/versions and scripts soon.
-
 ## Usage example
 
 To get the 14th verse of the Dhammapada
 
-```
-@BodhiBot dhp 14
-```
+    @BodhiBot dhp 14
 
 To get the verses from 103th till 105th of the Dhammapada
 
-```
-@BodhiBot dhp 103 105
-```
+    @BodhiBot dhp 103 105
 
 To get a random verse from the Dhammapada
 
-```
-@BodhiBot dhp
-```
+    @BodhiBot dhp
+
+Current translation in use is by Max Müller.
 
 ## Invite
 
