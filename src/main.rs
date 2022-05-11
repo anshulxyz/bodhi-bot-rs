@@ -67,11 +67,11 @@ async fn main() {
     // relative location of the SQLite database file
     let database_url = env::var("DATABASE_URL").expect("Expected a database url from environment.");
 
-    // database connection
     let db: DatabaseConnection = Database::connect(database_url)
         .await
         .expect("Error creating database connection");
 
+    // build the framework, can specify a prefic here (which I am not using)
     let framework = StandardFramework::new()
         .configure(|f| {
             f.with_whitespace(false)
@@ -109,8 +109,8 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
         .get::<DBConnection>()
         .expect("Expected DBConnection in TypeMap");
 
+    // single number as argument, user requesting one verse
     if args.len() == 1_usize {
-        // single verse number
         let first = args.single::<i32>()?;
         let verse: dhp::Model = dhp::Entity::find_by_id(first)
             .one(db)
@@ -133,7 +133,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             println!("Error sending single verse. {:?}", why)
         }
     } else if args.len() == 2_usize {
-        // verse number range
+        // user requesting a range of verses
         let mut first_num = args.single::<i32>()?;
         let mut last_num = args.single::<i32>()?;
 
@@ -183,7 +183,7 @@ async fn dhp(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             println!("Error sending multi verse. {:?}", why)
         }
     } else if args.is_empty() {
-        // send a random verse
+        // if no arguments are given, then return a random verse
         let mut rng = rand::rngs::OsRng;
         let random_num: i32 = rng.gen_range(1..=423);
 
