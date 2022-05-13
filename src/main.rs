@@ -42,7 +42,7 @@ async fn main() {
     println!("Hello, Discord!");
 
     // discord bot token
-    let token = env::var("DISCORD_TOKEN").expect("Expected a token from environment.");
+    let token = env::var("BODHI_TOKEN").expect("Expected a discord token from environment.");
 
     let http = Http::new(&token);
 
