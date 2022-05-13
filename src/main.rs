@@ -32,8 +32,9 @@ impl TypeMapKey for DBConnection {
 
 #[async_trait]
 impl EventHandler for Handler {
-    async fn ready(&self, _ctx: Context, ready: Ready) {
+    async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
+        ctx.set_activity(Activity::playing("@BodhiBot help")).await;
     }
 }
 
