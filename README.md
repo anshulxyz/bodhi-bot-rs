@@ -33,4 +33,4 @@ Current translation in use is by Max Müller.
 
 ## Invite
 
-Invite the bot of your server using [this link](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=274877925376&scope=bot)
+Invite the bot of your server using [this link](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=277025392640&scope=bot%20applications.commands)

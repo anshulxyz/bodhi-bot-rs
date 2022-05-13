@@ -231,7 +231,11 @@ async fn help(ctx: &Context, msg: &Message) -> CommandResult {
                 e.description("How to use this bot.");
                 e.field("Dhammapada (dhp)", "———", false);
                 e.field("`@BodhiBot dhp`", "Get a random verse", false);
-                e.field("`@BodhiBot dhp 209`", "Get the 209th verse", false);
+                e.field(
+                    "`@BodhiBot dhp 209`",
+                    "Get the 209th verse. Total 423 verses.",
+                    false,
+                );
                 e.field(
                     "`@BodhiBot dhp 103 106`",
                     "Get verses from 103 to 106",
