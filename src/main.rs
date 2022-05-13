@@ -18,7 +18,7 @@ use serenity::{
         StandardFramework,
     },
     http::Http,
-    model::{channel::Message, gateway::Ready},
+    model::{channel::Message, gateway::Ready, gateway::Activity},
     prelude::*,
     utils::MessageBuilder,
 };
@@ -278,7 +278,7 @@ async fn invite(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[group]
-#[commands(stats)]
+#[commands(stats, activity)]
 #[owners_only]
 struct Owner;
 
@@ -296,5 +296,13 @@ async fn stats(ctx: &Context, msg: &Message) -> CommandResult {
         println!("Error executing stats command: {:?}", why);
     }
 
+    Ok(())
+}
+
+#[command]
+async fn activity(ctx: &Context, _msg: &Message, args: Args) -> CommandResult {
+    let name = args.message();
+    ctx.set_activity(Activity::playing(&name)).await;
+    println!("Status set");
     Ok(())
 }
