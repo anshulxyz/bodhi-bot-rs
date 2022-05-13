@@ -1,6 +1,6 @@
 [package]
 name = "bodhi-bot-rs"
-version = "0.2.0"
+version = "1.0.0"
 authors = ["Anshul Chauhan anshulchauhan@outlook.com"]
 edition = "2021"
 rust-version = "1.60.0"
