@@ -35,7 +35,7 @@ Current translation in use is by Max Müller.
 
 ## Invite
 
-Invite the bot of your server using [this link](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=277025392640&scope=bot%20applications.commands)
+Invite the bot to your server using [this link](https://discord.com/api/oauth2/authorize?client_id=828781402681507860&permissions=277025392640&scope=bot%20applications.commands)
 
 ## Code
 
@@ -46,11 +46,11 @@ Libraries:-
 1. [Serenity](https://github.com/serenity-rs/serenity/), for Discord API
 2. [Sea-ORM](https://github.com/SeaQL/sea-orm), for ORM to access SQLite Database
 
-I am making the source code of this bot public on order to have it serve as an
-example of usage of the above libraries. This bot was previously written in
-Python. A goal to rewrite it, was to learn Rust.
+I am making the source code of this bot public to have it serve as an example
+of the usage of the above libraries. This bot was formerly in Python. A goal to
+rewrite it was to learn Rust.
 
-If you're interested in building the source code, please contact me on
-[twitter](https://twitter.com/anshulxyz). You'll need a SQLite database that
-follows the schema defined in [dhammapada.rs](src/data/dhammapada.rs).
-
+If you're interested in building the source code, contact me
+on [Twitter](https://twitter.com/anshulxyz). You'll need an SQLite database
+that follows the schema defined
+in [dhammapada.rs](https://github.com/anshulxyz/bodhi-bot-rs/blob/main/src/data/dhammapada.rs).
