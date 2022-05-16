@@ -2,6 +2,8 @@
 
 A Discord bot for referencing Buddhist verses and texts.
 
+[Demo](https://youtu.be/DYL19SGOmVw)
+
 If you have any issues with the bot, or have a suggestion. Feel free to contact
 me on [twitter.com/anshulxyz](https://twitter.com/anshulxyz)
 
@@ -54,3 +56,10 @@ If you're interested in building the source code, contact me
 on [Twitter](https://twitter.com/anshulxyz). You'll need an SQLite database
 that follows the schema defined
 in [dhammapada.rs](https://github.com/anshulxyz/bodhi-bot-rs/blob/main/src/data/dhammapada.rs).
+
+## ToDo/Coming Soon
+
+1. More translations for Dhammapada
+2. Slash Commands
+3. More scriptures
+
